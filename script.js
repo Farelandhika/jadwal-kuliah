@@ -998,16 +998,21 @@
     );
   }
 
-  function sendClassReminder(item, startTime, key) {
+  function sendClassReminder(item, startTime, key, minutesUntilStart) {
     if (notifiedReminders[key]) return;
     notifiedReminders[key] = Date.now();
-    const message = currentLanguage === "id" ? `${item.subject} dimulai pukul ${formatTime(startTime)} di ${item.room}.` : `${item.subject} starts at ${formatTime(startTime)} in ${item.room}.`;
+    const minutes = Math.max(1, Math.ceil(minutesUntilStart));
+    const message = currentLanguage === "id"
+      ? `${item.subject} dimulai ${minutes} menit lagi, pukul ${formatTime(startTime)} di ${item.room}.`
+      : `${item.subject} starts in ${minutes} minute${minutes === 1 ? "" : "s"}, at ${formatTime(startTime)} in ${item.room}.`;
     showNotificationToast(t("classComing"), message);
     playReminderSound();
     if ("Notification" in window && Notification.permission === "granted") {
       try {
         new Notification(`${t("classComing")} · ${item.subject}`, {
-          body: currentLanguage === "id" ? `Dimulai pukul ${formatTime(startTime)} di ${item.room}.` : `Starts at ${formatTime(startTime)} in ${item.room}.`,
+          body: currentLanguage === "id"
+            ? `Dimulai ${minutes} menit lagi, pukul ${formatTime(startTime)} di ${item.room}.`
+            : `Starts in ${minutes} minute${minutes === 1 ? "" : "s"}, at ${formatTime(startTime)} in ${item.room}.`,
           tag: key,
         });
       } catch {
@@ -1036,6 +1041,7 @@
           item,
           item.start,
           `${dateKey(now)}-${item.start}-${item.subject}`,
+          minutesUntilStart,
         );
     });
   }
@@ -1556,4 +1562,8 @@
     updateNextClass();
     checkClassReminders();
   }, 1000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) checkClassReminders();
+  });
+  window.addEventListener("focus", checkClassReminders);
 })();
