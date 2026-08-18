@@ -1090,20 +1090,10 @@
     }
     list.innerHTML = items
       .map(
-        (item, index) =>
-          `<div class="week-item"><span class="time">${formatTime(item.start)} — ${formatTime(item.end)}</span><span class="subject">${item.subject}</span><span class="room">${item.room}</span><button class="delete-class" data-day="${activeDay}" data-index="${index}" title="${t("removeClass")}">×</button></div>`,
+        (item) =>
+          `<div class="week-item"><span class="time">${formatTime(item.start)} — ${formatTime(item.end)}</span><span class="subject">${item.subject}</span><span class="room">${item.room}</span></div>`,
       )
       .join("");
-    list.querySelectorAll(".delete-class").forEach((btn) =>
-      btn.addEventListener("click", () => {
-        schedule[btn.dataset.day].splice(Number(btn.dataset.index), 1);
-        saveSchedule();
-        renderWeekly();
-        renderToday();
-        renderCalendar();
-        updateNextClass();
-      }),
-    );
   }
 
   function renderDeleteScheduleList() {
