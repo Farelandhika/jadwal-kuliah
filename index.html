@@ -94,7 +94,7 @@
         <section id="home" class="page-section hero-section">
           <div class="hero-copy">
             <p class="eyebrow">Tuesday, 18 August 2026 <span>✦</span></p>
-            <h1 id="heroGreeting">Good morning <span class="greeting-name">hisna</span>,<br /><span>Student</span> <i>♡</i></h1>
+            <h1 id="heroGreeting">Good morning <span class="greeting-name">Hisna</span>,<br /><span>Student</span> <i>♡</i></h1>
             <p class="hero-subtitle">
               Let's make today productive <span>✨</span>
             </p>
@@ -211,13 +211,19 @@
           </div>
         </section>
 
+        <section class="device-reminder panel" aria-label="Little reminder">
+          <span class="device-reminder-icon">☁︎</span>
+          <div><p class="eyebrow">little reminder</p><blockquote class="device-reminder-text">“Small steps, soft heart, steady progress.”</blockquote></div>
+          <span class="device-reminder-spark">✦</span>
+        </section>
+
         <section id="settings" class="panel settings-panel page-section" aria-labelledby="settings-title">
           <div class="settings-heading section-heading">
             <div>
               <p class="eyebrow">your little control room</p>
               <h2 id="settings-title">Planner Settings <span>⚙</span></h2>
             </div>
-            <span class="settings-spark">✦</span>
+            <div class="settings-heading-actions"><button id="closeSettings" class="settings-back" type="button">‹ Back to planner</button><span class="settings-spark">✦</span></div>
           </div>
 
           <div class="settings-grid">
@@ -238,6 +244,7 @@
             <article class="settings-card">
               <div class="settings-card-title"><span class="settings-icon">☾</span><div><h3>Appearance</h3><p>Choose the mood of your planner.</p></div></div>
               <label class="settings-select-label">Colour mode<select id="themeSelect"><option value="light">Soft light</option><option value="dark">Dark mauve</option><option value="system">Use device setting</option></select></label>
+              <label class="settings-select-label">Language<select id="languageSelect"><option value="en">English</option><option value="id">Bahasa Indonesia</option></select></label>
               <div class="settings-inline-note"><span>☀︎</span><p>Dark mode keeps the same soft pink feeling, just a little cosier.</p></div>
             </article>
 
@@ -245,6 +252,7 @@
               <div class="settings-card-title"><span class="settings-icon">✿</span><div><h3>Schedule & data</h3><p>Add, edit, or start fresh.</p></div></div>
               <div class="settings-button-stack">
                 <button id="settingsAddClass" class="settings-action" type="button"><span>＋</span><div><strong>Add a class</strong><small>Save it to your weekly planner</small></div><b>›</b></button>
+                <button id="settingsDeleteClass" class="settings-action danger-action" type="button"><span>−</span><div><strong>Delete a class</strong><small>Remove any class from your schedule</small></div><b>›</b></button>
                 <button id="settingsResetData" class="settings-action danger-action" type="button"><span>↺</span><div><strong>Reset planner data</strong><small>Restore the original schedule and content</small></div><b>›</b></button>
               </div>
             </article>
@@ -347,6 +355,16 @@
             ><button class="btn btn-primary" type="submit">Save Class ♡</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <div id="deleteScheduleModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="deleteScheduleTitle">
+      <div class="modal-card delete-schedule-card">
+        <button id="closeDeleteSchedule" class="modal-close" type="button" aria-label="Close">×</button>
+        <p class="eyebrow">manage your week</p>
+        <h2 id="deleteScheduleTitle">Delete a class <span>♡</span></h2>
+        <div id="deleteScheduleList" class="delete-schedule-list"></div>
+        <button id="cancelDeleteSchedule" class="btn btn-ghost delete-cancel" type="button">Cancel</button>
       </div>
     </div>
 
