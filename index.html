@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f8dce6" />
+    <title>My College Planner · Semester 5</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="ambient ambient-three"></div>
+    <div class="decor decor-1">✿</div>
+    <div class="decor decor-2">♡</div>
+    <div class="decor decor-3">☁︎</div>
+    <div class="decor decor-4">✦</div>
+    <div class="decor decor-5">🎀</div>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#home" aria-label="My College Planner home">
+          <span class="brand-mark">♡</span>
+          <span><strong>Hisna</strong><em>Planner</em></span>
+        </a>
+        <div class="semester-pill">Semester 5 <span>·</span> 2026</div>
+        <nav class="side-nav" aria-label="Main navigation">
+          <a class="nav-link active" href="#home" data-section="home"
+            ><span>⌂</span> Home</a
+          >
+          <a class="nav-link" href="#schedule" data-section="schedule"
+            ><span>♡</span> Schedule</a
+          >
+          <a class="nav-link" href="#calendar" data-section="calendar"
+            ><span>▦</span> Calendar</a
+          >
+          <a class="nav-link" href="#settings" data-section="settings"
+            ><span>⚙</span> Settings</a
+          >
+        </nav>
+        <div class="sidebar-note">
+          <span class="note-spark">✦</span>
+          <p>Little reminder</p>
+          <blockquote>
+            “Teruslah semangat, Jangan menyerahh!!”
+          </blockquote>
+          <span class="note-heart">♡</span>
+        </div>
+        <button
+          class="theme-toggle side-theme"
+          type="button"
+          aria-label="Toggle dark mode"
+        >
+          <span class="sun">☀︎</span><span class="moon">☾</span>
+        </button>
+        <p class="sidebar-footer">made with softness <span>♡</span></p>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="mobile-brand">
+            <span class="brand-mark">♡</span><span>My College Planner</span>
+          </div>
+          <div class="top-actions">
+            <button
+              class="icon-btn search-trigger"
+              type="button"
+              aria-label="Search classes"
+            >
+              ⌕
+            </button>
+            <button
+              class="icon-btn notification-trigger"
+              id="notificationButton"
+              type="button"
+              aria-label="Enable class reminders"
+              aria-pressed="false"
+              title="Enable class reminders"
+            >
+              <span class="bell-icon">🔔</span><span class="notification-dot" aria-hidden="true"></span>
+            </button>
+            <button class="avatar" type="button" aria-label="Student profile">
+              S
+            </button>
+          </div>
+        </header>
+
+        <section id="home" class="page-section hero-section">
+          <div class="hero-copy">
+            <p class="eyebrow">Tuesday, 18 August 2026 <span>✦</span></p>
+            <h1>Good morning hisna,<br /><span>Student</span> <i>♡</i></h1>
+            <p class="hero-subtitle">
+              Let's make today productive <span>✨</span>
+            </p>
+          </div>
+          <div class="hero-badge" aria-hidden="true">
+            <div class="badge-ring"><span>♡</span></div>
+            <small>study<br />with joy</small>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <div class="content-column">
+            <section class="panel today-panel" aria-labelledby="today-title">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">your day at a glance</p>
+                  <h2 id="today-title">Today's Classes <span>♡</span></h2>
+                </div>
+                <span class="date-chip" id="todayChip">18 AUG</span>
+              </div>
+              <div id="todayClasses" class="class-stack"></div>
+            </section>
+
+            <section
+              id="schedule"
+              class="panel weekly-panel"
+              aria-labelledby="weekly-title"
+            >
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">plan ahead, gently</p>
+                  <h2 id="weekly-title">My Weekly Schedule <span>✿</span></h2>
+                </div>
+                <button class="text-action" id="openAddTop" type="button">
+                  + Add Class
+                </button>
+              </div>
+              <div
+                class="day-tabs"
+                role="tablist"
+                aria-label="Weekday schedule"
+              >
+                <button role="tab" class="day-tab active" data-day="Mon">
+                  Mon <span>♡</span>
+                </button>
+                <button role="tab" class="day-tab" data-day="Tue">Tue</button>
+                <button role="tab" class="day-tab" data-day="Wed">Wed</button>
+                <button role="tab" class="day-tab" data-day="Thu">Thu</button>
+                <button role="tab" class="day-tab" data-day="Fri">Fri</button>
+              </div>
+              <div id="weeklyList" class="weekly-list"></div>
+            </section>
+          </div>
+
+          <div class="content-column side-column">
+            <section class="panel next-panel" aria-labelledby="next-title">
+              <div class="next-label">
+                <span class="live-dot"></span> NEXT CLASS <b>✨</b>
+              </div>
+              <div id="nextClassContent"></div>
+            </section>
+
+            <section
+              class="panel progress-panel"
+              aria-labelledby="progress-title"
+            >
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">a little progress every day</p>
+                  <h2 id="progress-title">Class Progress <span>🌸</span></h2>
+                </div>
+                <span id="progressPercent" class="progress-percent">—</span>
+              </div>
+              <div class="progress-track">
+                <div id="progressBar" class="progress-fill"></div>
+              </div>
+              <p id="progressStatus" class="muted-text">
+                Your progress will appear when a class is live.
+              </p>
+            </section>
+
+            <section
+              id="calendar"
+              class="panel calendar-panel"
+              aria-labelledby="calendar-title"
+            >
+              <div class="calendar-header">
+                <div>
+                  <p class="eyebrow">mark your little wins</p>
+                  <h2 id="calendar-title">August 2026 <span>♡</span></h2>
+                </div>
+                <div class="calendar-arrows">
+                  <button
+                    id="prevMonth"
+                    type="button"
+                    aria-label="Previous month"
+                  >
+                    ‹</button
+                  ><button id="nextMonth" type="button" aria-label="Next month">
+                    ›
+                  </button>
+                </div>
+              </div>
+              <div class="calendar-weekdays">
+                <span>MON</span><span>TUE</span><span>WED</span><span>THU</span
+                ><span>FRI</span><span>SAT</span><span>SUN</span>
+              </div>
+              <div id="calendarGrid" class="calendar-grid"></div>
+              <p class="calendar-legend">
+                <span class="legend-dot"></span> class day
+                <span class="legend-today"></span> today
+              </p>
+            </section>
+          </div>
+        </section>
+
+        <section id="settings" class="panel quote-panel page-section">
+          <span class="quote-icon">☁︎</span>
+          <p>Small steps, soft heart, steady progress.</p>
+          <span class="quote-spark">✦</span>
+        </section>
+      </main>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+      <a class="nav-link active" href="#home" data-section="home"
+        ><span>⌂</span><small>Home</small></a
+      >
+      <a class="nav-link" href="#schedule" data-section="schedule"
+        ><span>♡</span><small>Schedule</small></a
+      >
+      <a class="nav-link" href="#calendar" data-section="calendar"
+        ><span>▦</span><small>Calendar</small></a
+      >
+      <a class="nav-link" href="#settings" data-section="settings"
+        ><span>⚙</span><small>Settings</small></a
+      >
+    </nav>
+
+    <div id="searchOverlay" class="search-overlay" aria-hidden="true">
+      <div class="search-box">
+        <button class="close-search" type="button" aria-label="Close search">
+          ×
+        </button>
+        <p class="eyebrow">find your class</p>
+        <h2>Search your class <span>♡</span></h2>
+        <div class="search-input-wrap">
+          <span>⌕</span
+          ><input
+            id="searchInput"
+            type="search"
+            placeholder="Subject, room, day, time..."
+            autocomplete="off"
+          />
+        </div>
+        <div id="searchResults" class="search-results">
+          <p class="muted-text">Type to search across your whole week ✨</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="modal"
+      class="modal"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
+      <div class="modal-card">
+        <button
+          id="closeModal"
+          class="modal-close"
+          type="button"
+          aria-label="Close"
+        >
+          ×
+        </button>
+        <p class="eyebrow">make space for your plans</p>
+        <h2 id="modalTitle">Add a new class <span>🎀</span></h2>
+        <form id="classForm">
+          <label
+            >Subject<input name="subject" required placeholder="e.g. Ecology"
+          /></label>
+          <div class="form-row">
+            <label
+              >Day<select name="day" required>
+                <option value="Mon">Monday</option>
+                <option value="Tue">Tuesday</option>
+                <option value="Wed">Wednesday</option>
+                <option value="Thu">Thursday</option>
+                <option value="Fri">Friday</option>
+              </select></label
+            ><label
+              >Room<input name="room" required placeholder="e.g. C2.18"
+            /></label>
+          </div>
+          <div class="form-row">
+            <label>Start time<input name="start" type="time" required /></label
+            ><label>End time<input name="end" type="time" required /></label>
+          </div>
+          <div class="form-actions">
+            <button id="cancelModal" class="btn btn-ghost" type="button">
+              Cancel</button
+            ><button class="btn btn-primary" type="submit">Save Class ♡</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="notificationToast" class="notification-toast" role="status" aria-live="polite" aria-atomic="true">
+      <span class="toast-icon">🔔</span>
+      <div class="toast-copy"><strong>Class coming up</strong><p></p></div>
+      <button id="closeToast" class="toast-close" type="button" aria-label="Close notification">×</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
