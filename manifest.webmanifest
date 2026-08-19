@@ -1,0 +1,20 @@
+{
+  "name": "Jadwal Kuliah",
+  "short_name": "My Jadwal",
+  "description": "A soft academic planner with class reminders.",
+  "lang": "id-ID",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff8fa",
+  "theme_color": "#f0b7c8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./planner-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
