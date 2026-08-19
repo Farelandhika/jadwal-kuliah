@@ -449,6 +449,15 @@
           /* Periodic background sync is optional and browser-controlled. */
         }
       }
+      if (serviceWorkerRegistration.sync) {
+        try {
+          await serviceWorkerRegistration.sync.register(
+            "college-planner-reminders",
+          );
+        } catch {
+          /* One-off background sync is optional and browser-controlled. */
+        }
+      }
       await syncSystemReminders();
     } catch (error) {
       console.warn("Planner background notifications are unavailable.", error);
@@ -1762,6 +1771,8 @@
   }, 1000);
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) checkClassReminders();
+    else syncSystemReminders();
   });
   window.addEventListener("focus", checkClassReminders);
+  window.addEventListener("pagehide", syncSystemReminders);
 })();
