@@ -1,4 +1,4 @@
-const CACHE_NAME = "college-planner-shell-v3";
+const CACHE_NAME = "college-planner-shell-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -176,6 +176,11 @@ self.addEventListener("message", (event) => {
 });
 
 self.addEventListener("periodicsync", (event) => {
+  if (event.tag === PERIODIC_SYNC_TAG)
+    event.waitUntil(checkStoredReminders());
+});
+
+self.addEventListener("sync", (event) => {
   if (event.tag === PERIODIC_SYNC_TAG)
     event.waitUntil(checkStoredReminders());
 });
