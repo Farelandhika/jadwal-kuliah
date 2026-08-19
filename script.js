@@ -128,6 +128,12 @@
       allowNotifications: "Allow browser notifications",
       notificationsEnabled: "Browser notifications enabled ✓",
       notificationsBlocked: "Browser notifications blocked",
+      testNotification: "Test screen notification",
+      testNotificationBody: "This is how your class reminder will appear on the device.",
+      installPlanner: "Install planner app",
+      installedPlanner: "Planner is installed on this device ♡",
+      installUnavailable: "Use your browser menu to install this planner.",
+      notificationSupport: "Screen pop-ups work while this page is open. Install the planner as an app for background support on compatible browsers; device sound follows notification settings.",
       findClass: "find your class",
       searchClass: "Search your class",
       searchPlaceholder: "Subject, room, day, time...",
@@ -235,6 +241,12 @@
       allowNotifications: "Izinkan notifikasi browser",
       notificationsEnabled: "Notifikasi browser aktif ✓",
       notificationsBlocked: "Notifikasi browser diblokir",
+      testNotification: "Tes notifikasi layar",
+      testNotificationBody: "Begini tampilan pengingat kelas di perangkatmu.",
+      installPlanner: "Pasang planner sebagai aplikasi",
+      installedPlanner: "Planner sudah terpasang di perangkat ini ♡",
+      installUnavailable: "Gunakan menu browser untuk memasang planner ini.",
+      notificationSupport: "Pop-up layar berjalan saat halaman terbuka. Pasang planner sebagai aplikasi untuk dukungan latar belakang pada browser yang kompatibel; suara mengikuti pengaturan notifikasi perangkat.",
       findClass: "cari kelasmu",
       searchClass: "Cari kelasmu",
       searchPlaceholder: "Mata kuliah, ruangan, hari, jam...",
@@ -315,6 +327,9 @@
   let customSoundBlob = null;
   let customSoundURL = "";
   let soundDatabasePromise = null;
+  let serviceWorkerRegistration = null;
+  let serviceWorkerSupportsTriggers = false;
+  let deferredInstallPrompt = null;
   let contentSettings = {
     name: "hisna",
     role: "Student",
@@ -365,6 +380,87 @@
         : t("statusUpcoming");
   const dateKey = (date) =>
     `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+
+  function getSystemReminderEntries() {
+    if (!remindersEnabled) return [];
+    const now = Date.now();
+    const horizon = now + 1000 * 60 * 60 * 24 * 14;
+    const entries = [];
+    for (let offset = 0; offset < 14; offset += 1) {
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() + offset);
+      const day = dayKeys[date.getDay()];
+      (schedule[day] || []).forEach((item, index) => {
+        const [hours, minutes] = item.start.split(":").map(Number);
+        const start = new Date(date);
+        start.setHours(hours, minutes, 0, 0);
+        const timestamp = start.getTime() - reminderMinutes * 60000;
+        if (timestamp <= now + 1000 || timestamp >= horizon) return;
+        const id = `${dateKey(date)}-${day}-${item.start}-${index}-${item.subject}`;
+        entries.push({
+          id,
+          tag: `college-planner-${id}`,
+          timestamp,
+          title: `${t("classComing")} · ${item.subject}`,
+          body:
+            currentLanguage === "id"
+              ? `Dimulai pukul ${formatTime(item.start)} di ${item.room}.`
+              : `Starts at ${formatTime(item.start)} in ${item.room}.`,
+          silent: !soundEnabled,
+        });
+      });
+    }
+    return entries;
+  }
+
+  async function syncSystemReminders() {
+    if (!serviceWorkerRegistration) return;
+    const worker =
+      serviceWorkerRegistration.active ||
+      serviceWorkerRegistration.waiting ||
+      serviceWorkerRegistration.installing;
+    if (!worker) return;
+    worker.postMessage({
+      type: "SCHEDULE_REMINDERS",
+      reminders: getSystemReminderEntries(),
+    });
+  }
+
+  async function registerPlannerServiceWorker() {
+    if (
+      !("serviceWorker" in navigator) ||
+      !["http:", "https:"].includes(window.location.protocol)
+    )
+      return;
+    try {
+      serviceWorkerRegistration = await navigator.serviceWorker.register(
+        "./sw.js",
+        { scope: "./" },
+      );
+      await navigator.serviceWorker.ready;
+      if (serviceWorkerRegistration.periodicSync) {
+        try {
+          await serviceWorkerRegistration.periodicSync.register(
+            "college-planner-reminders",
+            { minInterval: 15 * 60 * 1000 },
+          );
+        } catch {
+          /* Periodic background sync is optional and browser-controlled. */
+        }
+      }
+      await syncSystemReminders();
+    } catch (error) {
+      console.warn("Planner background notifications are unavailable.", error);
+    }
+  }
+
+  function updateInstallButton() {
+    const button = $("installPlanner");
+    if (!button) return;
+    button.textContent = t("installPlanner");
+    button.hidden = !deferredInstallPrompt;
+  }
 
   function escapeHTML(value) {
     return String(value).replace(
@@ -584,6 +680,11 @@
     const permissionButton = $("requestNotificationPermission");
     if (permissionButton && !permissionButton.textContent.includes("✓"))
       permissionButton.textContent = t("allowNotifications");
+    const testNotification = $("testNotification");
+    if (testNotification) testNotification.textContent = t("testNotification");
+    const supportNote = $("notificationSupportNote");
+    if (supportNote) supportNote.textContent = t("notificationSupport");
+    updateInstallButton();
     const searchEyebrow = document.querySelector(".search-box .eyebrow");
     if (searchEyebrow) searchEyebrow.textContent = t("findClass");
     const searchTitle = document.querySelector(".search-box h2");
@@ -947,6 +1048,7 @@
     if (!("Notification" in window)) {
       remindersEnabled = true;
       saveReminderState();
+      syncSystemReminders();
       updateReminderButton();
       showNotificationToast(
         currentLanguage === "id" ? "Pengingat siap ♡" : "Reminders are ready ♡",
@@ -959,6 +1061,7 @@
     if (Notification.permission === "denied") {
       remindersEnabled = true;
       saveReminderState();
+      syncSystemReminders();
       updateReminderButton();
       showNotificationToast(
         currentLanguage === "id"
@@ -979,6 +1082,7 @@
     }
     remindersEnabled = true;
     saveReminderState();
+    syncSystemReminders();
     updateReminderButton();
     showNotificationToast(
       permission === "granted"
@@ -998,6 +1102,52 @@
     );
   }
 
+  async function showTestNotification() {
+    const title = t("classComing");
+    const body = t("testNotificationBody");
+    showNotificationToast(title, body);
+    if (
+      "Notification" in window &&
+      Notification.permission === "default"
+    ) {
+      await enableReminders();
+    }
+    if (
+      "Notification" in window &&
+      Notification.permission === "granted" &&
+      !serviceWorkerSupportsTriggers
+    ) {
+      try {
+        new Notification(title, {
+          body,
+          icon: "./planner-icon.svg",
+          badge: "./planner-icon.svg",
+          tag: "college-planner-test",
+          renotify: true,
+          silent: !soundEnabled,
+          vibrate: soundEnabled ? [180, 80, 180] : undefined,
+          data: { url: "./index.html" },
+        });
+        return;
+      } catch {
+        /* Fall through to the service worker or in-page reminder. */
+      }
+    }
+    const worker =
+      serviceWorkerRegistration?.active || serviceWorkerRegistration?.waiting;
+    if (worker)
+      worker.postMessage({
+        type: "SHOW_TEST_NOTIFICATION",
+        reminder: {
+          id: "college-planner-test",
+          tag: "college-planner-test",
+          title,
+          body,
+          silent: !soundEnabled,
+        },
+      });
+  }
+
   function sendClassReminder(item, startTime, key, minutesUntilStart) {
     if (notifiedReminders[key]) return;
     notifiedReminders[key] = Date.now();
@@ -1007,13 +1157,25 @@
       : `${item.subject} starts in ${minutes} minute${minutes === 1 ? "" : "s"}, at ${formatTime(startTime)} in ${item.room}.`;
     showNotificationToast(t("classComing"), message);
     playReminderSound();
-    if ("Notification" in window && Notification.permission === "granted") {
+    if (
+      "Notification" in window &&
+      Notification.permission === "granted" &&
+      !serviceWorkerSupportsTriggers
+    ) {
       try {
+        const customSoundAvailable = Boolean(customSoundURL || customSoundData);
+        const useSystemSound = document.hidden || !customSoundAvailable;
         new Notification(`${t("classComing")} · ${item.subject}`, {
           body: currentLanguage === "id"
             ? `Dimulai ${minutes} menit lagi, pukul ${formatTime(startTime)} di ${item.room}.`
             : `Starts in ${minutes} minute${minutes === 1 ? "" : "s"}, at ${formatTime(startTime)} in ${item.room}.`,
+          icon: "./planner-icon.svg",
+          badge: "./planner-icon.svg",
           tag: key,
+          renotify: true,
+          silent: !soundEnabled || !useSystemSound,
+          vibrate: soundEnabled && useSystemSound ? [180, 80, 180] : undefined,
+          data: { url: "./index.html" },
         });
       } catch {
         /* Browser may block notifications in file mode. */
@@ -1259,6 +1421,7 @@
 
   function saveSchedule() {
     localStorage.setItem("collegePlannerSchedule", JSON.stringify(schedule));
+    syncSystemReminders();
   }
   function openModal() {
     $("modal").classList.add("open");
@@ -1332,6 +1495,7 @@
     if (remindersEnabled) {
       remindersEnabled = false;
       saveReminderState();
+      syncSystemReminders();
       updateReminderButton();
       showNotificationToast(
         t("reminderPaused"),
@@ -1367,6 +1531,7 @@
     applyLanguage(event.target.value);
     renderToday(); renderWeekly(); renderCalendar(); updateNextClass();
     renderSearch($("searchInput").value);
+    syncSystemReminders();
     if ($("deleteScheduleModal")?.classList.contains("open")) renderDeleteScheduleList();
     showSettingsFeedback(currentLanguage === "id" ? "Bahasa Indonesia aktif ♡" : "English is now active ♡");
   });
@@ -1396,6 +1561,7 @@
   $("settingsReminderToggle")?.addEventListener("change", (event) => {
     remindersEnabled = event.target.checked;
     saveReminderState();
+    syncSystemReminders();
     updateReminderButton();
     if (
       remindersEnabled &&
@@ -1413,11 +1579,13 @@
   $("reminderLead")?.addEventListener("change", (event) => {
     reminderMinutes = Number(event.target.value) || 15;
     saveReminderState();
+    syncSystemReminders();
     showSettingsFeedback(currentLanguage === "id" ? `Aku akan mengingatkan ${reminderMinutes} menit sebelum kelas.` : `I will remind you ${reminderMinutes} minutes before class.`);
   });
   $("settingsSoundToggle")?.addEventListener("change", (event) => {
     soundEnabled = event.target.checked;
     saveReminderState();
+    syncSystemReminders();
     showSettingsFeedback(
       soundEnabled
         ? t("soundOn")
@@ -1437,6 +1605,7 @@
         : (currentLanguage === "id" ? "Memutar nada planner lembut ♫" : "Playing the soft planner tone ♫"),
     );
   });
+  $("testNotification")?.addEventListener("click", showTestNotification);
   $("settingsSoundFile")?.addEventListener("change", (event) => {
     const file = event.target.files?.[0];
     handleSoundFile(file).finally(() => {
@@ -1529,8 +1698,37 @@
     }
   });
 
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    updateInstallButton();
+  });
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      if (event.data?.type === "BACKGROUND_REMINDERS_STATUS")
+        serviceWorkerSupportsTriggers = Boolean(event.data.timestampTriggers);
+    });
+  }
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    updateInstallButton();
+    showSettingsFeedback(t("installedPlanner"));
+  });
+  $("installPlanner")?.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) {
+      showSettingsFeedback(t("installUnavailable"));
+      return;
+    }
+    const prompt = deferredInstallPrompt;
+    deferredInstallPrompt = null;
+    updateInstallButton();
+    await prompt.prompt();
+    await prompt.userChoice;
+  });
+
   applyLanguage(currentLanguage, false);
   applyTheme(localStorage.getItem("collegePlannerTheme") || "light", false);
+  registerPlannerServiceWorker();
   const initialSettingsView = window.location.hash === "#settings";
   toggleSettingsView(initialSettingsView, false);
   if (initialSettingsView) document.querySelectorAll(".nav-link").forEach((link) => link.classList.toggle("active", link.dataset.section === "settings"));
