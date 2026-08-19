@@ -242,7 +242,7 @@
       notificationsEnabled: "Notifikasi browser aktif ✓",
       notificationsBlocked: "Notifikasi browser diblokir",
       testNotification: "Tes notifikasi layar",
-      testNotificationBody: "Begini tampilan pengingat kelas di perangkatmu.",
+      testNotificationBody: "Kelas akan segera di mulai",
       installPlanner: "Pasang planner sebagai aplikasi",
       installedPlanner: "Planner sudah terpasang di perangkat ini ♡",
       installUnavailable: "Gunakan menu browser untuk memasang planner ini.",
@@ -275,7 +275,7 @@
       nothingScheduled: "Belum ada jadwal",
       addClassHint: "Tambahkan kelas agar minggumu lebih teratur ♡",
       progressIdle: "Progres akan muncul saat kelas sedang berlangsung.",
-      classComing: "Kelas sebentar lagi ✨",
+      classComing: "Kelas akan segera di mulai",
       reminderPaused: "Pengingat kelas dijeda",
       reminderPausedDesc:
         "Tekan lonceng lagi kapan pun ingin mengaktifkan pengingat.",
@@ -405,7 +405,7 @@
           title: `${t("classComing")} · ${item.subject}`,
           body:
             currentLanguage === "id"
-              ? `Dimulai pukul ${formatTime(item.start)} di ${item.room}.`
+              ? `Kelas akan segera di mulai: ${item.subject}, pukul ${formatTime(item.start)} di ${item.room}.`
               : `Starts at ${formatTime(item.start)} in ${item.room}.`,
           silent: !soundEnabled,
         });
@@ -1153,7 +1153,7 @@
     notifiedReminders[key] = Date.now();
     const minutes = Math.max(1, Math.ceil(minutesUntilStart));
     const message = currentLanguage === "id"
-      ? `${item.subject} dimulai ${minutes} menit lagi, pukul ${formatTime(startTime)} di ${item.room}.`
+      ? `Kelas akan segera di mulai: ${item.subject}, ${minutes} menit lagi, pukul ${formatTime(startTime)} di ${item.room}.`
       : `${item.subject} starts in ${minutes} minute${minutes === 1 ? "" : "s"}, at ${formatTime(startTime)} in ${item.room}.`;
     showNotificationToast(t("classComing"), message);
     playReminderSound();
@@ -1167,7 +1167,7 @@
         const useSystemSound = document.hidden || !customSoundAvailable;
         new Notification(`${t("classComing")} · ${item.subject}`, {
           body: currentLanguage === "id"
-            ? `Dimulai ${minutes} menit lagi, pukul ${formatTime(startTime)} di ${item.room}.`
+            ? `Kelas akan segera di mulai: ${item.subject}, ${minutes} menit lagi, pukul ${formatTime(startTime)} di ${item.room}.`
             : `Starts in ${minutes} minute${minutes === 1 ? "" : "s"}, at ${formatTime(startTime)} in ${item.room}.`,
           icon: "./planner-icon.svg",
           badge: "./planner-icon.svg",
