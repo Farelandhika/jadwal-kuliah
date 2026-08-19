@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f8dce6" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="planner-icon.svg" type="image/svg+xml" />
     <title>My College Planner · Semester 5</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,7 +30,7 @@
     <div class="app-shell">
       <aside class="sidebar">
         <a class="brand" href="#home" aria-label="My College Planner home">
-          <span class="brand-mark">♡</span>
+          <img class="brand-mark brand-image" src="planner-icon.svg" alt="" />
           <span><strong>Hisna</strong><em>Planner</em></span>
         </a>
         <div class="semester-pill">Semester 5 <span>·</span> 2026</div>
@@ -47,9 +51,7 @@
         <div class="sidebar-note">
           <span class="note-spark">✦</span>
           <p>Little reminder</p>
-          <blockquote>
-            “Teruslah semangat, Jangan menyerahh!!”
-          </blockquote>
+          <blockquote>“Teruslah semangat, Jangan menyerahh!!”</blockquote>
           <span class="note-heart">♡</span>
         </div>
         <button
@@ -65,7 +67,7 @@
       <main class="main-content">
         <header class="topbar">
           <div class="mobile-brand">
-            <span class="brand-mark">♡</span><span>My College Planner</span>
+            <img class="brand-mark brand-image" src="planner-icon.svg" alt="" /><span>My College Planner</span>
           </div>
           <div class="top-actions">
             <button
@@ -83,9 +85,15 @@
               aria-pressed="false"
               title="Enable class reminders"
             >
-              <span class="bell-icon">🔔</span><span class="notification-dot" aria-hidden="true"></span>
+              <span class="bell-icon">🔔</span
+              ><span class="notification-dot" aria-hidden="true"></span>
             </button>
-            <button id="studentAvatar" class="avatar" type="button" aria-label="Student profile">
+            <button
+              id="studentAvatar"
+              class="avatar"
+              type="button"
+              aria-label="Student profile"
+            >
               S
             </button>
           </div>
@@ -94,7 +102,12 @@
         <section id="home" class="page-section hero-section">
           <div class="hero-copy">
             <p class="eyebrow">Tuesday, 18 August 2026 <span>✦</span></p>
-            <h1 id="heroGreeting">Good morning <span class="greeting-name">Hisna</span>,<br /><span>Student</span> <i>♡</i></h1>
+            <h1 id="heroGreeting">
+              Good morning <span class="greeting-name">Hisna</span>,<br /><span
+                >Student</span
+              >
+              <i>♡</i>
+            </h1>
             <p class="hero-subtitle">
               Let's make today productive <span>✨</span>
             </p>
@@ -213,61 +226,272 @@
 
         <section class="device-reminder panel" aria-label="Little reminder">
           <span class="device-reminder-icon">☁︎</span>
-          <div><p class="eyebrow">little reminder</p><blockquote class="device-reminder-text">“Small steps, soft heart, steady progress.”</blockquote></div>
+          <div>
+            <p class="eyebrow">little reminder</p>
+            <blockquote class="device-reminder-text">
+              “Small steps, soft heart, steady progress.”
+            </blockquote>
+          </div>
           <span class="device-reminder-spark">✦</span>
         </section>
 
-        <section id="settings" class="panel settings-panel page-section" aria-labelledby="settings-title">
+        <section
+          id="settings"
+          class="panel settings-panel page-section"
+          aria-labelledby="settings-title"
+        >
           <div class="settings-heading section-heading">
             <div>
               <p class="eyebrow">your little control room</p>
               <h2 id="settings-title">Planner Settings <span>⚙</span></h2>
             </div>
-            <div class="settings-heading-actions"><button id="closeSettings" class="settings-back" type="button">‹ Back to planner</button><span class="settings-spark">✦</span></div>
+            <div class="settings-heading-actions">
+              <button id="closeSettings" class="settings-back" type="button">
+                ‹ Back to planner</button
+              ><span class="settings-spark">✦</span>
+            </div>
           </div>
 
           <div class="settings-grid">
             <article class="settings-card">
-              <div class="settings-card-title"><span class="settings-icon">♡</span><div><h3>Personalise your space</h3><p>Make every greeting feel like yours.</p></div></div>
-              <div class="settings-fields">
-                <label>Display name<input id="settingName" type="text" maxlength="28" placeholder="e.g. Hisna" /></label>
-                <label>Planner label<input id="settingRole" type="text" maxlength="28" placeholder="e.g. Student" /></label>
-                <label>Greeting<input id="settingGreeting" type="text" maxlength="32" placeholder="e.g. Good morning" /></label>
-                <label>Daily subtitle<input id="settingSubtitle" type="text" maxlength="70" placeholder="Let's make today productive ✨" /></label>
-                <label>Semester label<input id="settingSemester" type="text" maxlength="24" placeholder="e.g. Semester 5" /></label>
-                <label>Academic year<input id="settingYear" type="text" maxlength="12" placeholder="e.g. 2026" /></label>
-                <label>Little reminder<input id="settingQuote" type="text" maxlength="100" placeholder="Small steps, soft heart, steady progress." /></label>
+              <div class="settings-card-title">
+                <span class="settings-icon">♡</span>
+                <div>
+                  <h3>Personalise your space</h3>
+                  <p>Make every greeting feel like yours.</p>
+                </div>
               </div>
-              <button id="saveContentSettings" class="btn btn-primary settings-save" type="button">Save content ♡</button>
+              <div class="settings-fields">
+                <label
+                  >Display name<input
+                    id="settingName"
+                    type="text"
+                    maxlength="28"
+                    placeholder="e.g. Hisna"
+                /></label>
+                <label
+                  >Planner label<input
+                    id="settingRole"
+                    type="text"
+                    maxlength="28"
+                    placeholder="e.g. Student"
+                /></label>
+                <label
+                  >Greeting<input
+                    id="settingGreeting"
+                    type="text"
+                    maxlength="32"
+                    placeholder="e.g. Good morning"
+                /></label>
+                <label
+                  >Daily subtitle<input
+                    id="settingSubtitle"
+                    type="text"
+                    maxlength="70"
+                    placeholder="Let's make today productive ✨"
+                /></label>
+                <label
+                  >Semester label<input
+                    id="settingSemester"
+                    type="text"
+                    maxlength="24"
+                    placeholder="e.g. Semester 5"
+                /></label>
+                <label
+                  >Academic year<input
+                    id="settingYear"
+                    type="text"
+                    maxlength="12"
+                    placeholder="e.g. 2026"
+                /></label>
+                <label
+                  >Little reminder<input
+                    id="settingQuote"
+                    type="text"
+                    maxlength="100"
+                    placeholder="Small steps, soft heart, steady progress."
+                /></label>
+              </div>
+              <button
+                id="saveContentSettings"
+                class="btn btn-primary settings-save"
+                type="button"
+              >
+                Save content ♡
+              </button>
             </article>
 
             <article class="settings-card">
-              <div class="settings-card-title"><span class="settings-icon">☾</span><div><h3>Appearance</h3><p>Choose the mood of your planner.</p></div></div>
-              <label class="settings-select-label">Colour mode<select id="themeSelect"><option value="light">Soft light</option><option value="dark">Dark mauve</option><option value="system">Use device setting</option></select></label>
-              <label class="settings-select-label">Language<select id="languageSelect"><option value="en">English</option><option value="id">Bahasa Indonesia</option></select></label>
-              <div class="settings-inline-note"><span>☀︎</span><p>Dark mode keeps the same soft pink feeling, just a little cosier.</p></div>
+              <div class="settings-card-title">
+                <span class="settings-icon">☾</span>
+                <div>
+                  <h3>Appearance</h3>
+                  <p>Choose the mood of your planner.</p>
+                </div>
+              </div>
+              <label class="settings-select-label"
+                >Colour mode<select id="themeSelect">
+                  <option value="light">Soft light</option>
+                  <option value="dark">Dark mauve</option>
+                  <option value="system">Use device setting</option>
+                </select></label
+              >
+              <label class="settings-select-label"
+                >Language<select id="languageSelect">
+                  <option value="en">English</option>
+                  <option value="id">Bahasa Indonesia</option>
+                </select></label
+              >
+              <div class="settings-inline-note">
+                <span>☀︎</span>
+                <p>
+                  Dark mode keeps the same soft pink feeling, just a little
+                  cosier.
+                </p>
+              </div>
             </article>
 
             <article class="settings-card">
-              <div class="settings-card-title"><span class="settings-icon">✿</span><div><h3>Schedule & data</h3><p>Add, edit, or start fresh.</p></div></div>
+              <div class="settings-card-title">
+                <span class="settings-icon">✿</span>
+                <div>
+                  <h3>Schedule & data</h3>
+                  <p>Add, edit, or start fresh.</p>
+                </div>
+              </div>
               <div class="settings-button-stack">
-                <button id="settingsAddClass" class="settings-action" type="button"><span>＋</span><div><strong>Add a class</strong><small>Save it to your weekly planner</small></div><b>›</b></button>
-                <button id="settingsDeleteClass" class="settings-action danger-action" type="button"><span>−</span><div><strong>Delete a class</strong><small>Remove any class from your schedule</small></div><b>›</b></button>
-                <button id="settingsResetData" class="settings-action danger-action" type="button"><span>↺</span><div><strong>Reset planner data</strong><small>Restore the original schedule and content</small></div><b>›</b></button>
+                <button
+                  id="settingsAddClass"
+                  class="settings-action"
+                  type="button"
+                >
+                  <span>＋</span>
+                  <div>
+                    <strong>Add a class</strong
+                    ><small>Save it to your weekly planner</small>
+                  </div>
+                  <b>›</b>
+                </button>
+                <button
+                  id="settingsDeleteClass"
+                  class="settings-action danger-action"
+                  type="button"
+                >
+                  <span>−</span>
+                  <div>
+                    <strong>Delete a class</strong
+                    ><small>Remove any class from your schedule</small>
+                  </div>
+                  <b>›</b>
+                </button>
+                <button
+                  id="settingsResetData"
+                  class="settings-action danger-action"
+                  type="button"
+                >
+                  <span>↺</span>
+                  <div>
+                    <strong>Reset planner data</strong
+                    ><small>Restore the original schedule and content</small>
+                  </div>
+                  <b>›</b>
+                </button>
               </div>
             </article>
 
             <article class="settings-card notification-settings-card">
-              <div class="settings-card-title"><span class="settings-icon">🔔</span><div><h3>Notifications & sound</h3><p>Never miss your next class.</p></div></div>
-              <label class="switch-row"><span><strong>Class reminders</strong><small>Show a reminder before each class</small></span><input id="settingsReminderToggle" type="checkbox" /><span class="switch-ui" aria-hidden="true"></span></label>
-              <label class="settings-select-label">Remind me before<select id="reminderLead"><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option></select></label>
-              <div class="sound-row"><label class="switch-row"><span><strong>Notification sound</strong><small>Play a gentle sound with reminders</small></span><input id="settingsSoundToggle" type="checkbox" /><span class="switch-ui" aria-hidden="true"></span></label><button id="testSound" class="mini-btn" type="button">Test</button></div>
-              <label class="file-picker"><span>🎵</span><span><strong id="soundFileName">Add a sound from your device</strong><small>MP3, MPEG, MP4, WAV, OGG, or M4A</small></span><input id="settingsSoundFile" type="file" accept="audio/*,audio/mpeg,audio/mp4,video/mp4,.mp3,.mpeg,.mp4,.wav,.ogg,.m4a,.aac,.flac,.webm" /></label>
-              <label class="volume-label">Volume <output id="volumeValue">55%</output><input id="soundVolume" type="range" min="0" max="100" value="55" /></label>
-              <button id="requestNotificationPermission" class="settings-outline" type="button">Allow browser notifications</button>
+              <div class="settings-card-title">
+                <span class="settings-icon">🔔</span>
+                <div>
+                  <h3>Notifications & sound</h3>
+                  <p>Never miss your next class.</p>
+                </div>
+              </div>
+              <label class="switch-row"
+                ><span
+                  ><strong>Class reminders</strong
+                  ><small>Show a reminder before each class</small></span
+                ><input id="settingsReminderToggle" type="checkbox" /><span
+                  class="switch-ui"
+                  aria-hidden="true"
+                ></span
+              ></label>
+              <label class="settings-select-label"
+                >Remind me before<select id="reminderLead">
+                  <option value="5">5 minutes</option>
+                  <option value="10">10 minutes</option>
+                  <option value="15">15 minutes</option>
+                  <option value="30">30 minutes</option>
+                </select></label
+              >
+              <div class="sound-row">
+                <label class="switch-row"
+                  ><span
+                    ><strong>Notification sound</strong
+                    ><small>Play a gentle sound with reminders</small></span
+                  ><input id="settingsSoundToggle" type="checkbox" /><span
+                    class="switch-ui"
+                    aria-hidden="true"
+                  ></span></label
+                ><button id="testSound" class="mini-btn" type="button">
+                  Test
+                </button>
+              </div>
+              <label class="file-picker"
+                ><span>🎵</span
+                ><span
+                  ><strong id="soundFileName"
+                    >Add a sound from your device</strong
+                  ><small>MP3, MPEG, MP4, WAV, OGG, or M4A</small></span
+                ><input
+                  id="settingsSoundFile"
+                  type="file"
+                  accept="audio/*,audio/mpeg,audio/mp4,video/mp4,.mp3,.mpeg,.mp4,.wav,.ogg,.m4a,.aac,.flac,.webm"
+              /></label>
+              <label class="volume-label"
+                >Volume <output id="volumeValue">55%</output
+                ><input
+                  id="soundVolume"
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="55"
+              /></label>
+              <button
+                id="requestNotificationPermission"
+                class="settings-outline"
+                type="button"
+              >
+                Allow browser notifications
+              </button>
+              <button
+                id="testNotification"
+                class="settings-outline"
+                type="button"
+              >
+                Test screen notification
+              </button>
+              <button
+                id="installPlanner"
+                class="settings-outline install-planner"
+                type="button"
+                hidden
+              >
+                Install planner app
+              </button>
+              <p id="notificationSupportNote" class="notification-support-note">
+                Screen pop-ups work while this page is open. Install the planner
+                as an app for background support; device sound follows
+                notification settings.
+              </p>
             </article>
           </div>
-          <p id="settingsFeedback" class="settings-feedback" role="status" aria-live="polite"></p>
+          <p
+            id="settingsFeedback"
+            class="settings-feedback"
+            role="status"
+            aria-live="polite"
+          ></p>
         </section>
       </main>
     </div>
@@ -358,20 +582,56 @@
       </div>
     </div>
 
-    <div id="deleteScheduleModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="deleteScheduleTitle">
+    <div
+      id="deleteScheduleModal"
+      class="modal"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="deleteScheduleTitle"
+    >
       <div class="modal-card delete-schedule-card">
-        <button id="closeDeleteSchedule" class="modal-close" type="button" aria-label="Close">×</button>
+        <button
+          id="closeDeleteSchedule"
+          class="modal-close"
+          type="button"
+          aria-label="Close"
+        >
+          ×
+        </button>
         <p class="eyebrow">manage your week</p>
         <h2 id="deleteScheduleTitle">Delete a class <span>♡</span></h2>
         <div id="deleteScheduleList" class="delete-schedule-list"></div>
-        <button id="cancelDeleteSchedule" class="btn btn-ghost delete-cancel" type="button">Cancel</button>
+        <button
+          id="cancelDeleteSchedule"
+          class="btn btn-ghost delete-cancel"
+          type="button"
+        >
+          Cancel
+        </button>
       </div>
     </div>
 
-    <div id="notificationToast" class="notification-toast" role="status" aria-live="polite" aria-atomic="true">
+    <div
+      id="notificationToast"
+      class="notification-toast"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       <span class="toast-icon">🔔</span>
-      <div class="toast-copy"><strong>Class coming up</strong><p></p></div>
-      <button id="closeToast" class="toast-close" type="button" aria-label="Close notification">×</button>
+      <div class="toast-copy">
+        <strong>Class coming up</strong>
+        <p></p>
+      </div>
+      <button
+        id="closeToast"
+        class="toast-close"
+        type="button"
+        aria-label="Close notification"
+      >
+        ×
+      </button>
     </div>
 
     <script src="script.js"></script>
